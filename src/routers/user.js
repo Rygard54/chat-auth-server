@@ -4,7 +4,7 @@ const auth = require('../middleware/auth')
 const { sendWelcomeEmail , sendCancelEmail } = require('../emails/account')
 const socketIOClient = require ('socket.io-client');
 
-const endpoint = "http://127.0.0.1:3005"
+const endpoint = process.env.SOCKET_ENDPOINT
 const socket = socketIOClient(endpoint);
 
 const router = new express.Router();
@@ -13,16 +13,17 @@ const router = new express.Router();
 
 router.post('/auth/create',async (req,res)=>{
     console.log(req.body)
+    console.log(endpoint)
     const user = new User(req.body) //we pass the object with the attributes, we allready have it in req object
     
     try{
         await user.save();
         socket.emit('CREATEACCOUNT', req.body);
-
+        console.log('SE ENVIO EL MENSAJE PARA OTRO SERVER')
         sendWelcomeEmail( user.email , user.userName ); //call the function to send an email to the new user
 
-        const token = await user.generateAuthToken(); // generate the token to validate the created user 
-        res.status(201).send( { user , token } );
+        // const token = await user.generateAuthToken(); // generate the token to validate the created user 
+        res.status(201).send( { user } );
     }catch(e){
        
         res.status(400).send(e)

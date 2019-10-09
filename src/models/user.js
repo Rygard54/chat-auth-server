@@ -36,13 +36,13 @@ const userSchema = new mongoose.Schema({
                 throw new Error('password can not contain "password"')
             }
         }
-    },
-    tokens: [{ //this help us to have  more that one token so the user can be loged in more than one device
-        token:{
-            type:String,
-            require:true
-        }
-    }]
+    }
+    // tokens: [{ //this help us to have  more that one token so the user can be loged in more than one device
+    //     token:{
+
+    //         type:String
+    //     }
+    // }]
 }, {
     timestamps:true //add 2 fields when it was created and last update
 });
